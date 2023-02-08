@@ -1,4 +1,5 @@
 from flask import Flask,render_template,request
+from constants import USER_NAME,PASSWORD
 from SPARQLWrapper import SPARQLWrapper, JSON, XML
 
 
@@ -18,7 +19,7 @@ def hello_world():
     sparql = SPARQLWrapper("https://enigma-endpoint.disk.isi.edu/enigma_dev/sparql")
 
     #To add
-    sparql.setCredentials(user, password)
+    sparql.setCredentials(USER_NAME, PASSWORD)
 
     sparql.setReturnFormat(JSON)
 
