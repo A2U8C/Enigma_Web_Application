@@ -13,4 +13,4 @@ env.bak/
 venv.bak/
 
 # Constants
-constants.py 
+*constants.py 

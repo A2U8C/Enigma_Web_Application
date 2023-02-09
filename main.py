@@ -1,5 +1,5 @@
 from flask import Flask,render_template,request
-from constants import USER_NAME,PASSWORD
+from API.constants import USER_NAME,PASSWORD
 from SPARQLWrapper import SPARQLWrapper, JSON, XML
 
 

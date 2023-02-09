@@ -14,10 +14,10 @@ class Queryer():
             PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
             PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 
-            SELECT {VARS} WHERE {{
+            SELECT {DISTINCT} {VARS} WHERE {{
                 {QUERY}
             }}
-            LIMIT 10
+            {OPTIONS}
         '''
 
         # Set Credentials for endpoint and data return type
@@ -29,7 +29,13 @@ class Queryer():
             self.sparql.setReturnFormat(XML)
         
         # Set Query
-        base_query = base_query.format(VARS = ' '.join(query['VARS']), QUERY =query['QUERY'] )
+        base_query = base_query.format(
+            VARS = ' '.join(query['VARS']), 
+            QUERY =query['QUERY'],
+            DISTINCT = 'DISTINCT' if query['DISTINCT'] else '',
+            OPTIONS = ' \n'.join(query['OPTIONS'])
+            )
+            
         self.sparql.setQuery(base_query)
         
         # Send response to endpoint
