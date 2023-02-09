@@ -11,8 +11,6 @@ app = Flask(__name__)
 def hello_world():
     var2="mean_age" if request.args.get('query_name', type = str)==None else request.args.get('query_name', type = str)
 
-    print(var2)
-
     dict_query={"mean_age": r"HasAge Mean (E)", "participants_number": r"HasNumberOfParticipants (E)"}
 
 
@@ -47,17 +45,14 @@ def hello_world():
     # Convert results to JSON format
     result2 = sparql.query().convert()
 
-    print("Results",result2)
-
-
     # For URI, #of participants
     # for hit in result2["results"]["bindings"]:
     #     print(hit["participants"]["datatype"],hit["participants"]["value"])
 
     # For URI, #of participants
-    print("Name: \t\t\t\t\t\t\t\t\t\t\t\t\t\t "+var2)
-    for hit in result2["results"]["bindings"]:
-        print(hit["cohortObj"]["value"]+" \t\t\t\t\t\t\t "+hit[var2]["value"])
+    # print("Name: \t\t\t\t\t\t\t\t\t\t\t\t\t\t "+var2)
+    # for hit in result2["results"]["bindings"]:
+    #     print(hit["cohortObj"]["value"]+" \t\t\t\t\t\t\t "+hit[var2]["value"])
 
     return result2["results"]["bindings"]
 
