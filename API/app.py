@@ -3,6 +3,7 @@ from flask_restful import Api
 
 # Import Resources
 from Resources.Cohorts import CohortList
+from Resources.Cohorts import Cohort
 
 app = Flask(__name__)
 api = Api(app)
@@ -15,6 +16,11 @@ endpoint = "https://enigma-endpoint.disk.isi.edu/enigma_dev/sparql"
 api.add_resource(CohortList,
                  '/cohorts', 
                  resource_class_kwargs = {'endpoint':endpoint})
+
+api.add_resource(Cohort,
+                 '/cohort/<string:cohort_name>',
+                 resource_class_kwargs = {'endpoint':endpoint})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
