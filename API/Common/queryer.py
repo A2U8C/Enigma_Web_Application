@@ -35,13 +35,19 @@ class Queryer():
             DISTINCT = 'DISTINCT' if query['DISTINCT'] else '',
             OPTIONS = ' \n'.join(query['OPTIONS'])
             )
-            
+
+        print("Queryer")
         self.sparql.setQuery(base_query)
         
         # Send response to endpoint
         try:
-            response = self.sparql.queryAndConvert()
-            return response["results"]["bindings"]
+            response = self.sparql.queryAndConvert()["results"]["bindings"]
+            for dict_el in response:
+                if dict_el["propsval"]["type"]=="uri":
+                    dict_el["propsval"]["type"] = "literal"
+                    dict_el["propsval"]["value"] = str(dict_el["propsval"]["value"].split("/")[-1]).replace("_"," ")
+
+            return response
 
         except Exception as e:
             print(e)

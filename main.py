@@ -42,18 +42,7 @@ def hello_world():
 
     sparql.setQuery(new_q)
 
-    # Convert results to JSON format
     result2 = sparql.query().convert()
-
-    # For URI, #of participants
-    # for hit in result2["results"]["bindings"]:
-    #     print(hit["participants"]["datatype"],hit["participants"]["value"])
-
-    # For URI, #of participants
-    # print("Name: \t\t\t\t\t\t\t\t\t\t\t\t\t\t "+var2)
-    # for hit in result2["results"]["bindings"]:
-    #     print(hit["cohortObj"]["value"]+" \t\t\t\t\t\t\t "+hit[var2]["value"])
-
     return result2["results"]["bindings"]
 
 
