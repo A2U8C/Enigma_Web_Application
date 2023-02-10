@@ -5,20 +5,30 @@ from Common.queryer import Queryer
 
 class Cohort(Resource):
 
-   def __init__(self, cohortName:str) -> None:
+   def __init__(self, **kwargs) -> None:
       super().__init__()
 
       # Initialize Class Variables
-      self.cohortName = cohortName
+      self.endpoint = kwargs['endpoint']
+      self.base_query = '''
+            ?project a ?projectClass.
+            ?projectClass rdfs:label "Project (E)".
 
-   def get(self):
+            ?projectName rdfs:label "{projectName}" .
+
+            ?project ?hasCohort ?cohort.
+            ?hasCohort rdfs:label "HasCohort (E)".
+  
+            ?cohort rdfs:label ?cohortName.
+      '''
+
+   def post(self,cohort_name):
+      project_name = request.get_json()['projectName']
       pass
 
 class CohortList(Resource):
     def __init__(self, **kwargs) -> None:
-       
        super().__init__()
-
        # Initialize class variables
        self.base_query = '''
             ?project a ?projectClass.
