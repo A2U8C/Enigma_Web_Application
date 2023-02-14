@@ -1,4 +1,4 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, XML
+from SPARQLWrapper import SPARQLWrapper, JSON, XML, CSV
 from constants import USER_NAME,PASSWORD
 
 class Queryer():
@@ -27,6 +27,8 @@ class Queryer():
             self.sparql.setReturnFormat(JSON)
         elif self.returnFormat == 'xml':
             self.sparql.setReturnFormat(XML)
+        elif self.returnFormat == 'csv':
+            self.sparql.setReturnFormat(CSV)
         
         # Set Query
         base_query = base_query.format(
@@ -36,24 +38,20 @@ class Queryer():
             OPTIONS = ' \n'.join(query['OPTIONS'])
             )
 
-        print("Queryer")
         self.sparql.setQuery(base_query)
         
         # Send response to endpoint
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
+            
             for dict_el in response:
-                if dict_el["propsval"]["type"]=="uri":
-                    dict_el["propsval"]["type"] = "literal"
-                    dict_el["propsval"]["value"] = str(dict_el["propsval"]["value"].split("/")[-1]).replace("_"," ")
-
+                dict_copy = dict(dict_el)
+                for val in dict_copy:
+                    if dict_el[val]['type'] == "uri":
+                        dict_el[val]["type"] = "literal"
+                        dict_el[val]["value"] = str(dict_el[val]["value"].split("/")[-1]).replace("_"," ")
+               
             return response
 
         except Exception as e:
             print(e)
-
-
-            
-
-
-

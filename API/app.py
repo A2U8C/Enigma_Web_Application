@@ -8,18 +8,12 @@ from Resources.Cohorts import Cohort
 app = Flask(__name__)
 api = Api(app)
 
-endpoint = "https://enigma-endpoint.disk.isi.edu/enigma_dev/sparql"
-
 # Register All Resources Below
 
 # Cohort URLS
-api.add_resource(CohortList,
-                 '/cohorts', 
-                 resource_class_kwargs = {'endpoint':endpoint})
+api.add_resource(CohortList,'/cohorts')
 
-api.add_resource(Cohort,
-                 '/cohort/<string:cohort_name>',
-                 resource_class_kwargs = {'endpoint':endpoint})
+api.add_resource(Cohort,'/cohort/<string:cohort_name>')
 
 
 if __name__ == "__main__":
