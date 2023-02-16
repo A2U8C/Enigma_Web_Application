@@ -1,7 +1,7 @@
 def getProjectNameQuery(project_name):
 
     query = f"""
-        ?project a ?projectClass.
+        ?name a ?projectClass.
         ?projectClass rdfs:label "Project (E)".
 
         ?name rdfs:label "{project_name}" .
@@ -11,7 +11,7 @@ def getProjectNameQuery(project_name):
 def getWorkingGroupNameQuery(working_group_name):
 
     query = f"""
-         ?workingGroup a ?workingGroupClass.
+         ?name a ?workingGroupClass.
         ?workingGroupClass rdfs:label "WorkingGroup (E)".
   
         ?name rdfs:label "{working_group_name}".

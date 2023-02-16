@@ -11,7 +11,7 @@ api = Api(app)
 # Register All Resources Below
 
 # Cohort URLS
-api.add_resource(CohortList,'/cohorts')
+api.add_resource(CohortList,'/cohort')
 api.add_resource(Cohort,'/cohort/<string:cohort_name>')
 api.add_resource(CohortProject, '/cohort/project/<string:cohort_project>')
 

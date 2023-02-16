@@ -39,8 +39,8 @@ class CohortList(Resource):
         
     
       query,vars = QB.getCohortNameListQuery()
-      query = formatQuery(vars ,base_query + query, distinct=True)
-   
+      query = formatQuery(vars ,base_query + query)
+      print(query['QUERY'])
       response = obj.select_query(query)
       
       return response
