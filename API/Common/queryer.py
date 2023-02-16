@@ -1,10 +1,18 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, XML, CSV
 from constants import USER_NAME,PASSWORD
+from Common.utils import URIToValue
 
 class Queryer():
-    def __init__(self, endpoint, returnFormat = 'json'):
+    def __init__(self, endpoint, returnFormat = 'JSON'):
+
+        supportedReturnFormats = {
+            'JSON': JSON,
+            'XML': XML,
+            'CSV': CSV
+        }
+
         self.sparql = SPARQLWrapper(endpoint)
-        self.returnFormat = returnFormat
+        self.returnFormat = supportedReturnFormats[returnFormat]
         
     
     def select_query(self, query):
@@ -22,13 +30,7 @@ class Queryer():
 
         # Set Credentials for endpoint and data return type
         self.sparql.setCredentials(USER_NAME,PASSWORD)
-
-        if self.returnFormat == 'json':
-            self.sparql.setReturnFormat(JSON)
-        elif self.returnFormat == 'xml':
-            self.sparql.setReturnFormat(XML)
-        elif self.returnFormat == 'csv':
-            self.sparql.setReturnFormat(CSV)
+        self.sparql.setReturnFormat(self.returnFormat)
         
         # Set Query
         base_query = base_query.format(
@@ -48,6 +50,7 @@ class Queryer():
                 dict_copy = dict(dict_el)
                 for val in dict_copy:
                     if dict_el[val]['type'] == "uri":
+                        # Get Value of URI
                         dict_el[val]["type"] = "literal"
                         dict_el[val]["value"] = str(dict_el[val]["value"].split("/")[-1]).replace("_"," ")
                

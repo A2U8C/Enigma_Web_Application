@@ -1,35 +1,66 @@
+def getProjectNameQuery(project_name):
 
-baseQueries = {
-    "working_group": """
-        ?workingGroup a ?workingGroupClass.
-        ?workingGroupClass rdfs:label "WorkingGroup (E)".
-  
-        ?workingGroupName rdfs:label "{name}".
-
-    """,
-
-    "project": """
+    query = f"""
         ?project a ?projectClass.
         ?projectClass rdfs:label "Project (E)".
 
-        ?projectName rdfs:label "{name}" .
+        ?name rdfs:label "{project_name}" .
+    """
+    return query, ["?name"]
 
+def getWorkingGroupNameQuery(working_group_name):
+
+    query = f"""
+         ?workingGroup a ?workingGroupClass.
+        ?workingGroupClass rdfs:label "WorkingGroup (E)".
+  
+        ?name rdfs:label "{working_group_name}".
+    """
+    
+    return query, ["?name"]
+
+def getCohortNameListQuery():
+    query = """
+        ?name ?hasCohort ?cohort.
+        ?hasCohort rdfs:label "HasCohort (E)".
+  
+        ?cohort rdfs:label ?cohortName.
+    """
+    return query,["?cohortName"]
+
+def getCohortNameQuery(cohort_name:str):
+
+    vars = ["?propsVal","?props"]
+    
+    query = f"""
+            ?name ?hasCohort ?cohort.
+            ?hasCohort rdfs:label "HasCohort (E)".
+            
+            ?cohort rdfs:label ?cohortName.
+            ?cohort ?hasProp ?propsURI.
+            ?hasProp rdfs:label ?props.
+            
+            ?cohort ?cohortprop {vars[0]} .
+            ?cohortprop rdfs:label {vars[1]} .
+            
+            filter(?cohortName = "{cohort_name}").
+    """
+    return query,vars
+
+def getCohortProjectQuery(cohort_project_name):
+    vars = ["?propsVal", "?props"]
+    query =f"""
+            ?name ?hasCohortProj ?cohortProj.
+            ?hasCohortProj rdfs:label "HasCohortProject (E)".
+            
+            ?cohortProj rdfs:label ?cohortProjName.
+            ?cohortProj ?hasProp ?propsURI.
+            ?hasProp rdfs:label ?props.
+            
+            ?cohortProj ?cohortProjProp {vars[0]} .
+            ?cohortProjProp rdfs:label {vars[1]} .
+            
+            filter(?cohortProjName = "{cohort_project_name}").
     """
 
-}
-
-def getBaseQuery(isWg):
-    if isWg:
-        return baseQueries["working_group"], '?workingGroup'
-    else:
-        return baseQueries["project"], '?project'
-
-def formatQuery(vars:list, query:str , distinct:bool = False, options:list = []) -> str:
-    query = {
-        'VARS': vars,
-        'QUERY': query,
-        'DISTINCT': distinct,
-        'OPTIONS' : options
-    }
-
-    return query
+    return query,vars
