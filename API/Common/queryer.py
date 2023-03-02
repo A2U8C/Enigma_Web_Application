@@ -1,6 +1,6 @@
 from SPARQLWrapper import SPARQLWrapper, JSON, XML, CSV
 from constants import USER_NAME,PASSWORD
-from Common.utils import URIToValue
+
 
 class Queryer():
     def __init__(self, endpoint, returnFormat = 'JSON'):
@@ -12,8 +12,30 @@ class Queryer():
         }
 
         self.sparql = SPARQLWrapper(endpoint)
-        self.returnFormat = supportedReturnFormats[returnFormat]
-        
+        self.returnFormat = supportedReturnFormats[returnFormat.upper()]
+    
+    def request(self,query:str):
+        '''
+            Request data from sparql endpoint
+
+            #### Parameters
+
+            query: Sparql Query to execute 
+        '''
+        # Set global credentials
+        self.sparql.setCredentials(USER_NAME,PASSWORD)
+        self.sparql.setReturnFormat(self.returnFormat)
+
+        # Set Query
+        self.sparql.setQuery(query)
+
+        # Try sending request
+        try:
+            response = self.sparql.queryAndConvert()["results"]["bindings"]
+            return response
+        except Exception as e:
+            print(e)
+
     
     def select_query(self, query):
         base_query = '''

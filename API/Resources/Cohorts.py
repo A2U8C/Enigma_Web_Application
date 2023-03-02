@@ -3,7 +3,7 @@ from flask import request
 
 from Common.queryer import Queryer
 from Common import QueryBuilder as QB
-from Common.utils import formatQuery
+# from Common.utils import formatQuery
 
 
 # Get the property values of cohort
@@ -29,18 +29,26 @@ class CohortList(Resource):
        abort(403,message="Forbidden Method")
 
     def post(self):
-      body = request.get_json()
-      obj = Queryer(body['endpoint_id'])
+        body = request.get_json()
+        obj = Queryer(body['endpoint_id'])
 
-      if body['isWG']:
-            base_query, _ = QB.getWorkingGroupNameQuery(body['name'])
-      else:
-            base_query, _ = QB.getProjectNameQuery(body['name'])
+
+        query = f'''
+            ?project a ?projectClass.
+            ?projectClass rdfs:label "Project (E)".
+
+            ?project rdfs:label "{body['name']}".
+
+            ?project ?hasCohort ?cohort.
+            ?hasCohort rdfs:label "HasCohort (E)".
+  
+            ?cohort rdfs:label ?cohortName .
+        '''
         
-    
-      query,vars = QB.getCohortNameListQuery()
-      query = formatQuery(vars ,base_query + query)
-      print(query['QUERY'])
-      response = obj.select_query(query)
-      
-      return response
+        vars = ['?cohortName']
+
+        qb = QB.QueryBuilder()
+        qb.set_query(query=query, vars=vars)
+        
+        response = obj.request(qb.get_query())
+        return response
