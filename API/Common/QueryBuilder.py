@@ -18,8 +18,9 @@ class QueryBuilder():
 
     def get_query(self) -> str:
         return self.base_query
-    
-    def set_prefixes(self, prefix: list[str]) -> None:
+
+    #prefix (list[str])
+    def set_prefixes(self, prefix) -> None:
     
         '''
             Sets prefixes of a query

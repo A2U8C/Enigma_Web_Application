@@ -5,36 +5,46 @@ from Common.queryer import Queryer
 from Common import QueryBuilder as QB
 
 class CohortProject(Resource):
-    def get(self, cohort_project):
-        return cohort_project.replace("_"," ")
+    def get(self, cohort_name, cohort_project_name):
+        return cohort_name.replace("_"," ")
 
     def post(self, cohort_name, cohort_project_name):
         body = request.get_json()
         obj = Queryer(body['endpoint_id'])
-
-        query = '''
-              ?cohort a ?cohortClass.
-            ?cohortClass rdfs:label "Cohort (E)".
+        cohort_project_name=cohort_project_name.replace("_", " ")
+        print(cohort_project_name)
+        query = f'''
+              ?project a ?projectClass.
+            ?projectClass rdfs:label "Project (E)".
+            
+            ?projectName rdfs:label "{body['name']}" .
+            
+            ?project ?hasCohort ?cohort.
+            ?hasCohort rdfs:label "HasCohort (E)".
+  			?cohort rdfs:label ?cohortProjname .
   
-            ?cohort rdfs:label "CHRISTCHURCH".
-  
-            ?cohort ?hasCohortProj ?cohortProj.
+  			?cohort ?hasCohortProj ?cohortprojects.
             ?hasCohortProj rdfs:label "HasCohortProject (E)".
+  			?cohortprojects rdfs:label ?cohortProjectname .
   
-            ?cohortProj rdfs:label ?cohortProjName.
+            ?cohortprojects ?hasProp ?propsURI.
+            ?hasProp rdfs:label ?props.
+            
+            filter(?cohortProjname = "{cohort_name}")
+            filter(?cohortProjectname = "{cohort_project_name}")
         '''
-        vars = ['cohortProjName']
+        vars = ['?props','?propsURI']
 
         qb = QB.QueryBuilder()
         qb.set_query(query=query, vars=vars)
 
-        response = obj.select_query(qb.get_query())
+        response = obj.request(qb.get_query())
 
         return response
 
 class CohortProjectList(Resource):
     def get(self, cohort_name:str) -> str:
-        return cohort_name.split('_', ' ')
+        return cohort_name.replace('_', ' ')
     
     def post(self, cohort_name: str):
         body = request.get_json()
@@ -61,6 +71,7 @@ class CohortProjectList(Resource):
         response = obj.request(qb.get_query())
         
         return response
-    
 
-        
+
+
+

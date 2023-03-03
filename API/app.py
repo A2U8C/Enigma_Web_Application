@@ -11,10 +11,12 @@ api = Api(app)
 # Register All Resources Below
 
 # Cohort URLS
-api.add_resource(CohortList,'/cohort')
-api.add_resource(Cohort,'/cohort/<string:cohort_name>')
-api.add_resource(CohortProject, '/cohort/<string:cohort_name>/project/<string:cohort_project>')
-api.add_resource(CohortProjectList, '/cohort/<string:cohort_name>/project')
+api.add_resource(CohortList,'/cohorts') #Done
+api.add_resource(CohortProjectList, '/cohorts/<string:cohort_name>/projects')#Done
+
+
+api.add_resource(Cohort,'/cohorts/<string:cohort_name>') #Done
+api.add_resource(CohortProject, '/cohorts/<string:cohort_name>/projects/<string:cohort_project_name>')#Done
 
 if __name__ == "__main__":
     app.run(debug=True)

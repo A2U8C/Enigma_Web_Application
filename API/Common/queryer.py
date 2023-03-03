@@ -32,6 +32,16 @@ class Queryer():
         # Try sending request
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
+
+            #print("Next Entered")
+            for dict_el in response:
+                dict_copy = dict(dict_el)
+                for val in dict_copy:
+                    if dict_el[val]['type'] == "uri":
+                        # Get Value of URI
+                        dict_el[val]["type"] = "literal"
+                        dict_el[val]["value"] = str(dict_el[val]["value"].split("/")[-1]).replace("_", " ")
+
             return response
         except Exception as e:
             print(e)
@@ -53,7 +63,7 @@ class Queryer():
         # Set Credentials for endpoint and data return type
         self.sparql.setCredentials(USER_NAME,PASSWORD)
         self.sparql.setReturnFormat(self.returnFormat)
-        
+        print(query['VARS'])
         # Set Query
         base_query = base_query.format(
             VARS = ' '.join(query['VARS']), 
@@ -67,7 +77,8 @@ class Queryer():
         # Send response to endpoint
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
-            
+
+            #print("Entered")
             for dict_el in response:
                 dict_copy = dict(dict_el)
                 for val in dict_copy:
