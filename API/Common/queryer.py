@@ -1,11 +1,51 @@
-from SPARQLWrapper import SPARQLWrapper, JSON, XML
+from SPARQLWrapper import SPARQLWrapper, JSON, XML, CSV
 from constants import USER_NAME,PASSWORD
 
+
 class Queryer():
-    def __init__(self, endpoint, returnFormat = 'json'):
+    def __init__(self, endpoint, returnFormat = 'JSON'):
+
+        supportedReturnFormats = {
+            'JSON': JSON,
+            'XML': XML,
+            'CSV': CSV
+        }
+
         self.sparql = SPARQLWrapper(endpoint)
-        self.returnFormat = returnFormat
-        
+        self.returnFormat = supportedReturnFormats[returnFormat.upper()]
+    
+    def request(self,query:str):
+        '''
+            Request data from sparql endpoint
+
+            #### Parameters
+
+            query: Sparql Query to execute 
+        '''
+        # Set global credentials
+        self.sparql.setCredentials(USER_NAME,PASSWORD)
+        self.sparql.setReturnFormat(self.returnFormat)
+
+        # Set Query
+        self.sparql.setQuery(query)
+
+        # Try sending request
+        try:
+            response = self.sparql.queryAndConvert()["results"]["bindings"]
+
+            #print("Next Entered")
+            for dict_el in response:
+                dict_copy = dict(dict_el)
+                for val in dict_copy:
+                    if dict_el[val]['type'] == "uri":
+                        # Get Value of URI
+                        dict_el[val]["type"] = "literal"
+                        dict_el[val]["value"] = str(dict_el[val]["value"].split("/")[-1]).replace("_", " ")
+
+            return response
+        except Exception as e:
+            print(e)
+
     
     def select_query(self, query):
         base_query = '''
@@ -22,12 +62,8 @@ class Queryer():
 
         # Set Credentials for endpoint and data return type
         self.sparql.setCredentials(USER_NAME,PASSWORD)
-
-        if self.returnFormat == 'json':
-            self.sparql.setReturnFormat(JSON)
-        elif self.returnFormat == 'xml':
-            self.sparql.setReturnFormat(XML)
-        
+        self.sparql.setReturnFormat(self.returnFormat)
+        print(query['VARS'])
         # Set Query
         base_query = base_query.format(
             VARS = ' '.join(query['VARS']), 
@@ -36,24 +72,22 @@ class Queryer():
             OPTIONS = ' \n'.join(query['OPTIONS'])
             )
 
-        print("Queryer")
         self.sparql.setQuery(base_query)
         
         # Send response to endpoint
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
-            for dict_el in response:
-                if dict_el["propsval"]["type"]=="uri":
-                    dict_el["propsval"]["type"] = "literal"
-                    dict_el["propsval"]["value"] = str(dict_el["propsval"]["value"].split("/")[-1]).replace("_"," ")
 
+            #print("Entered")
+            for dict_el in response:
+                dict_copy = dict(dict_el)
+                for val in dict_copy:
+                    if dict_el[val]['type'] == "uri":
+                        # Get Value of URI
+                        dict_el[val]["type"] = "literal"
+                        dict_el[val]["value"] = str(dict_el[val]["value"].split("/")[-1]).replace("_"," ")
+               
             return response
 
         except Exception as e:
             print(e)
-
-
-            
-
-
-

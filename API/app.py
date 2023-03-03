@@ -2,25 +2,21 @@ from flask import Flask
 from flask_restful import Api
 
 # Import Resources
-from Resources.Cohorts import CohortList
-from Resources.Cohorts import Cohort
+from Resources.Cohorts import CohortList, Cohort
+from Resources.CohortProjects import CohortProject, CohortProjectList
 
 app = Flask(__name__)
 api = Api(app)
 
-endpoint = "https://enigma-endpoint.disk.isi.edu/enigma_dev/sparql"
-
 # Register All Resources Below
 
 # Cohort URLS
-api.add_resource(CohortList,
-                 '/cohorts', 
-                 resource_class_kwargs = {'endpoint':endpoint})
+api.add_resource(CohortList,'/cohorts') #Done
+api.add_resource(CohortProjectList, '/cohorts/<string:cohort_name>/projects')#Done
 
-api.add_resource(Cohort,
-                 '/cohort/<string:cohort_name>',
-                 resource_class_kwargs = {'endpoint':endpoint})
 
+api.add_resource(Cohort,'/cohorts/<string:cohort_name>') #Done
+api.add_resource(CohortProject, '/cohorts/<string:cohort_name>/projects/<string:cohort_project_name>')#Done
 
 if __name__ == "__main__":
     app.run(debug=True)
