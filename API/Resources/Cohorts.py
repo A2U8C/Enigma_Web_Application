@@ -4,9 +4,11 @@ from flask import request
 from Common.queryer import Queryer
 from Common import QueryBuilder as QB
 # from Common.utils import formatQuery
+from flask_cors import CORS, cross_origin
 
 
 # Get the property values of cohort
+# @cross_origin()
 class Cohort(Resource):
     def get(self, cohort_name: str) -> str:
         return cohort_name.replace('_', ' ')
@@ -46,7 +48,7 @@ class Cohort(Resource):
         return response
 # Get List of Cohorts part of a project or Working Group
 
-
+# @cross_origin()
 class CohortList(Resource):
     def get(self):
        abort(403,message="Forbidden Method")

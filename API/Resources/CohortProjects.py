@@ -3,7 +3,9 @@ from flask import request
 
 from Common.queryer import Queryer
 from Common import QueryBuilder as QB
+from flask_cors import CORS, cross_origin
 
+# @cross_origin()
 class CohortProject(Resource):
     def get(self, cohort_name, cohort_project_name):
         return cohort_name.replace("_"," ")
@@ -42,6 +44,7 @@ class CohortProject(Resource):
 
         return response
 
+# @cross_origin()
 class CohortProjectList(Resource):
     def get(self, cohort_name:str) -> str:
         return cohort_name.replace('_', ' ')

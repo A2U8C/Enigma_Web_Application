@@ -7,7 +7,7 @@ class QueryBuilder():
         self.base_query = ''
         self.prefixes = ''
         self.query_type = ''
-        self.distinct = False
+        self.distinct = True
         self.vars = ''
         self.query = ''
         self.modifiers = ''
