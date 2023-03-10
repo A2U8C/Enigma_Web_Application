@@ -21,7 +21,7 @@ class Cohort(Resource):
 
         query = f'''
             ?project a ?projectClass.
-            ?projectClass rdfs:label "Project (E)".
+            ?projectClass rdfs:label "{body['projType']}".
 
             ?projectName rdfs:label "{body['name']}" .
 
@@ -60,7 +60,7 @@ class CohortList(Resource):
 
         query = f'''
             ?project a ?projectClass.
-            ?projectClass rdfs:label "Project (E)".
+            ?projectClass rdfs:label "{body['projType']}".
 
             ?project rdfs:label "{body['name']}".
 
@@ -75,5 +75,6 @@ class CohortList(Resource):
         qb = QB.QueryBuilder()
         qb.set_query(query=query, vars=vars)
         
+       
         response = obj.request(qb.get_query())
         return response
