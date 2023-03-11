@@ -17,7 +17,7 @@ class CohortProject(Resource):
         print(cohort_project_name)
         query = f'''
               ?project a ?projectClass.
-            ?projectClass rdfs:label "Project (E)".
+            ?projectClass rdfs:label "{body['projType']}".
             
             ?projectName rdfs:label "{body['name']}" .
             

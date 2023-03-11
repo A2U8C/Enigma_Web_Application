@@ -24,6 +24,7 @@ class Queryer():
         '''
         # Set global credentials
         self.sparql.setCredentials(USER_NAME,PASSWORD)
+        print(USER_NAME,PASSWORD)
         self.sparql.setReturnFormat(self.returnFormat)
 
         # Set Query
