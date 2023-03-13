@@ -125,5 +125,19 @@ class CohortDetails(Resource):
 
         response = obj.request(qb.get_query())
 
-        return response
+        # Format Response
+        toReturn = dict()
+        for val in response:
+            if (n := val['prop']['value']) in toReturn:
+                temp = toReturn[n]
+                if type(temp) == str:
+                    toReturn[n] = list()
+                    toReturn[n].append(temp)
+                
+                toReturn[n].append(val['PropValURI']['value'])
+
+            else:
+                toReturn[val['prop']['value']] = val['PropValURI']['value']
+
+        return toReturn
 
