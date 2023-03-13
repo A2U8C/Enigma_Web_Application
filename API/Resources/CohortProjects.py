@@ -56,8 +56,8 @@ class CohortProjectList(Resource):
         print(cohort_name)
 
         query = f'''
-            ?cohort a ?cohortClass.
-            ?cohortClass rdfs:label "Cohort (E)".
+         ?cohort a ?cohortClass.
+            #?cohortClass rdfs:label "Cohort (E)".
   
             ?cohort rdfs:label "{cohort_name}".
   
@@ -65,6 +65,7 @@ class CohortProjectList(Resource):
             ?hasCohortProj rdfs:label "HasCohortProject (E)".
   
             ?cohortProj rdfs:label ?cohortProjName.
+           
         '''
         vars = ['?cohortProjName']
 

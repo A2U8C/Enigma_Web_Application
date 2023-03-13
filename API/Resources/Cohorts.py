@@ -7,6 +7,8 @@ from Common import QueryBuilder as QB
 from flask_cors import CORS, cross_origin
 from constants import missing_datasets
 
+from collections import OrderedDict
+
 # Get the property values of cohort
 # @cross_origin()
 class Cohort(Resource):
@@ -74,15 +76,15 @@ class CohortList(Resource):
 
         qb = QB.QueryBuilder()
         qb.set_query(query=query, vars=vars)
-        
+        #,modifiers={"Order by" : "ASC(?cohortName)"}
        
         response = obj.request(qb.get_query())
 
         dict_cohort_part = {}
         all_cohorts = [i["cohortName"]["value"] for i in response]
-        present_cohorts = list(set(all_cohorts) - missing_datasets)
+        present_cohorts = sorted(set(all_cohorts) - missing_datasets)
         dict_cohort_part["presentCohorts"] = present_cohorts
-        dict_cohort_part["Missing"] = list(missing_datasets)
+        dict_cohort_part["Missing"] = sorted(missing_datasets)
 
 
         print("***************************************************************",dict_cohort_part)
