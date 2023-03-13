@@ -56,11 +56,6 @@ class CohortProjectList(Resource):
         print(cohort_name)
 
         query = f'''
-        
-        
-        
-        
-        
          ?cohort a ?cohortClass.
             #?cohortClass rdfs:label "Cohort (E)".
   
