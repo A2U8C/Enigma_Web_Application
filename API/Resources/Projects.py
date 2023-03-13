@@ -4,6 +4,7 @@ from flask import request
 from Common.queryer import Queryer
 from Common import QueryBuilder as QB
 from collections import defaultdict
+from .Cohorts import CohortList
 
 class ProjectList(Resource):
     def get(self):
@@ -38,11 +39,16 @@ class ProjectList(Resource):
 
         print(type(response))
 
+        all_know_cohorts=set(CohortList().post()["presentCohorts"]+CohortList().post()["Missing"])
+
+
         dict_proj_name=defaultdict(list)
+
         all_list=set()
         for i in response:
             dict_proj_name[i["ProjName"]["value"]].append(i["cohort"]["value"])
             all_list.add(i["cohort"]["value"])
 
-        dict_proj_name["allCohorts"]=list(all_list)
+        dict_proj_name["missingInfo"]=list(all_know_cohorts-all_list)
+        # dict_proj_name["allCohorts"]=list(all_list)
         return dict_proj_name
