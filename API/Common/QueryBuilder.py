@@ -73,7 +73,7 @@ class QueryBuilder():
         self.query += query
 
         self.query_type = kwargs.get('query_type', QueryTypes.SELECT).value
-        self.distinct = kwargs.get('distinct',False)
+        self.distinct = kwargs.get('distinct',True)
         
         self.set_prefixes(kwargs.get('prefixes',[]))
         self.set_modifiers(kwargs.get('modifiers', {}))

@@ -49,6 +49,6 @@ class ProjectList(Resource):
             dict_proj_name[i["ProjName"]["value"]].append(i["cohort"]["value"])
             all_list.add(i["cohort"]["value"])
 
-        dict_proj_name["missingInfo"]=list(all_know_cohorts-all_list)
+        dict_proj_name["Unknown"]=list(all_know_cohorts-all_list)
         # dict_proj_name["allCohorts"]=list(all_list)
         return dict_proj_name
