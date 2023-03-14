@@ -73,7 +73,6 @@ class CovariateCohortList(Resource):
         covariate_name = covariate_name.replace("_", " ")
         covariate_prop_name = covariate_prop_name.replace("_", " ")
 
-        print(covariate_name, covariate_prop_name)
 
         query = f'''
             ?project a ?projectClass.

@@ -15,7 +15,7 @@ class CohortProject(Resource):
         body = request.get_json()
         obj = Queryer(body['endpoint_id'])
         cohort_project_name = cohort_project_name.replace("_", " ")
-        print(cohort_project_name)
+
         query = f'''
               ?project a ?projectClass.
             ?projectClass rdfs:label "{body['projType']}".
@@ -55,7 +55,6 @@ class CohortProjectList(Resource):
         body = request.get_json()
         obj = Queryer(body['endpoint_id'])
         cohort_name = cohort_name.replace('_', ' ')
-        print(cohort_name)
 
         query = f'''
          ?cohort a ?cohortClass.
