@@ -24,6 +24,7 @@ class Queryer():
         '''
         # Set global credentials
         self.sparql.setCredentials(USER_NAME,PASSWORD)
+        print(USER_NAME,PASSWORD)
         self.sparql.setReturnFormat(self.returnFormat)
 
         # Set Query
@@ -33,6 +34,7 @@ class Queryer():
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
 
+            #print("Next Entered")
             for dict_el in response:
                 dict_copy = dict(dict_el)
                 for val in dict_copy:
@@ -62,6 +64,7 @@ class Queryer():
         # Set Credentials for endpoint and data return type
         self.sparql.setCredentials(USER_NAME,PASSWORD)
         self.sparql.setReturnFormat(self.returnFormat)
+        print(query['VARS'])
         # Set Query
         base_query = base_query.format(
             VARS = ' '.join(query['VARS']), 
@@ -76,6 +79,7 @@ class Queryer():
         try:
             response = self.sparql.queryAndConvert()["results"]["bindings"]
 
+            #print("Entered")
             for dict_el in response:
                 dict_copy = dict(dict_el)
                 for val in dict_copy:
