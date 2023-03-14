@@ -16,7 +16,6 @@ class Cohort(Resource):
         return cohort_name.replace('_', ' ')
 
     def post(self, cohort_name: str):
-        print(cohort_name)
         body = request.get_json()
         obj = Queryer(body['endpoint_id'])
         cohort_name = cohort_name.replace('_', ' ')
@@ -87,7 +86,6 @@ class CohortList(Resource):
         dict_cohort_part["Missing"] = sorted(missing_datasets)
 
 
-        print("***************************************************************",dict_cohort_part)
         return dict_cohort_part
         # return response
 
@@ -98,7 +96,6 @@ class CohortDetails(Resource):
         return cohort_name.replace('_', ' ')
 
     def post(self, cohort_name: str):
-        print(cohort_name)
         body = request.get_json()
         obj = Queryer(body['endpoint_id'])
         cohort_name = cohort_name.replace('_', ' ')
@@ -127,19 +124,21 @@ class CohortDetails(Resource):
 
         response = obj.request(qb.get_query())
 
-        # Format Response
+        #Updated
         toReturn = dict()
         for val in response:
-            if (n := val['prop']['value']) in toReturn:
+            n=val['prop']['value'].replace("(E)","").rstrip()
+            if n in toReturn:
                 temp = toReturn[n]
                 if type(temp) == str:
                     toReturn[n] = list()
                     toReturn[n].append(temp)
-                
+
                 toReturn[n].append(val['PropValURI']['value'])
 
             else:
-                toReturn[val['prop']['value']] = val['PropValURI']['value']
+                toReturn[n] = val['PropValURI']['value']
 
         return toReturn
+        # return response
 
