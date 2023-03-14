@@ -89,9 +89,19 @@ class CovariateCohortList(Resource):
         all_cohorts = CohortList().post()["presentCohorts"]
         givenpresent = [i["cohortName"]["value"] for i in response]
         givenabsent = list(set(all_cohorts) - missing_datasets - set(givenpresent))
-        dict_cohort_part["GivenPresent"] = givenpresent
-        dict_cohort_part["GivenAbsent"] = givenabsent
-        dict_cohort_part["Missing"] = list(missing_datasets)
+        
+        for val in all_cohorts:
+            if(val in givenabsent):
+                dict_cohort_part[val] = "Absent"
+            else:
+                dict_cohort_part[val] = "Present"
+        
+        for val in missing_datasets:
+            dict_cohort_part[val] = "Missing"
+        
+        # dict_cohort_part["GivenPresent"] = givenpresent
+        # dict_cohort_part["GivenAbsent"] = givenabsent
+        # dict_cohort_part["Missing"] = list(missing_datasets)
 
 
 

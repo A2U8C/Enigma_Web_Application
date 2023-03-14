@@ -42,15 +42,32 @@ class ProjectList(Resource):
         all_know_cohorts=set(CohortList().post()["presentCohorts"]+CohortList().post()["Missing"])
 
 
+        projects = list()
         dict_proj_name=defaultdict(list)
 
         all_list=set()
-        for i in response:
-            dict_proj_name[i["ProjName"]["value"]].append(i["cohort"]["value"])
 
-            dict_proj_name[i["ProjName"]["value"]]=sorted(dict_proj_name[i["ProjName"]["value"]])
-            all_list.add(i["cohort"]["value"])
+        for val in response:
+            dict_proj_name[val['cohort']['value']].append(val["ProjName"]["value"])
+            if(v := val["ProjName"]["value"]) not in projects:
+                projects.append(v)
+            all_list.add(val['cohort']['value'])
 
-        dict_proj_name["Unknown"]=sorted(all_know_cohorts-all_list)
+        for val in (all_know_cohorts-all_list):
+            dict_proj_name[val] = ["Unknown"]
+        
+        projects.append("Unknown")
+
+        toReturn = {
+            'projects': projects,
+            'cohorts': dict_proj_name
+        }
+        # for i in response:
+        #     dict_proj_name[i["ProjName"]["value"]].append(i["cohort"]["value"])
+
+        #     dict_proj_name[i["ProjName"]["value"]]=sorted(dict_proj_name[i["ProjName"]["value"]])
+        #     all_list.add(i["cohort"]["value"])
+
+        # dict_proj_name["Unknown"]=sorted(all_know_cohorts-all_list)
         # dict_proj_name["allCohorts"]=list(all_list)
-        return dict_proj_name
+        return toReturn
