@@ -127,7 +127,7 @@ class CohortDetails(Resource):
             temp_val = val['PropValURI']['value']
             if val['PropValURI'].get('datatype',False):
                 print(val['PropValURI']['datatype'])
-                temp_val=float(temp_val.replace("e",""))
+                temp_val=float(temp_val)
 
 
             if n in toReturn:
