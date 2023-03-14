@@ -46,15 +46,16 @@ class CovariateCohortList(Resource):
         covariate_name = covariate_name.replace("_", " ")
         covariate_prop_name = covariate_prop_name.replace("_", " ")
 
+        print(covariate_name,covariate_prop_name)
 
         query = f'''
             ?project a ?projectClass.
             ?projectClass rdfs:label "{body['projType']}".
-
-            #?projectName rdfs:label "{body['projType']}" .
+            
+            ?projectName rdfs:label "{body['name']}" . 
 
             ?project ?hasCohort ?cohortURI.
-            ?hasCohort rdfs:label "HasCohort (E)".
+            #?hasCohort rdfs:label "HasCohort (E)".
   
   			?cohortURI ?propName ?ProjNameURI . 
   			?propName rdfs:label "{covariate_name}".
@@ -74,6 +75,8 @@ class CovariateCohortList(Resource):
         response = obj.request(qb.get_query())
 
 
+        print(qb.get_query())
+
         # dict_cohort_part={}
         # all_cohorts=CohortList().post()
         # all_cohorts=[i["cohortName"]["value"] for i in all_cohorts]
@@ -82,11 +85,14 @@ class CovariateCohortList(Resource):
         # dict_cohort_part["GivenPresent"]=givenpresent
         # dict_cohort_part["GivenAbsent"]=givenabsent
         # dict_cohort_part["Missing"]=list(missing_datasets)
-        # print(dict_cohort_part)
-        # # print(response)
+
 
         dict_cohort_part = {}
-        all_cohorts = CohortList().post()["presentCohorts"]
+        cohortList_post=CohortList().post()
+        all_cohorts = cohortList_post["presentCohorts"]+cohortList_post["Missing"]
+        # print(all_cohorts)
+        dict_cohort_part["all_cohorts"] = list(all_cohorts)
+
         givenpresent = [i["cohortName"]["value"] for i in response]
         givenabsent = list(set(all_cohorts) - missing_datasets - set(givenpresent))
         dict_cohort_part["GivenPresent"] = givenpresent

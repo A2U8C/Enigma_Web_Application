@@ -37,7 +37,6 @@ class ProjectList(Resource):
 
         response = obj.request(qb.get_query())
 
-        print(type(response))
 
         all_know_cohorts=set(CohortList().post()["presentCohorts"]+CohortList().post()["Missing"])
 
@@ -51,6 +50,7 @@ class ProjectList(Resource):
             dict_proj_name[i["ProjName"]["value"]]=sorted(dict_proj_name[i["ProjName"]["value"]])
             all_list.add(i["cohort"]["value"])
 
+        dict_proj_name["all_cohorts"]=sorted(all_know_cohorts)
         dict_proj_name["Unknown"]=sorted(all_know_cohorts-all_list)
         # dict_proj_name["allCohorts"]=list(all_list)
         return dict_proj_name
