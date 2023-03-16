@@ -43,7 +43,35 @@ class CohortProject(Resource):
 
         response = obj.request(qb.get_query())
 
-        return response
+
+
+
+        print(response)
+        responseDict = dict()
+        for val in response:
+            n = val['props']['value'].replace("(E)", "").rstrip()
+            temp_val = val['propsURI']['value']
+            if val['propsURI'].get('datatype',False):
+                print(val['propsURI']['datatype'])
+                temp_val=float(temp_val)
+
+
+            if n in responseDict:
+                temp = responseDict[n]
+                if type(temp) == str:
+                    responseDict[n] = list()
+                    responseDict[n].append(temp)
+
+                responseDict[n].append(temp_val)
+
+            else:
+                responseDict[n] = temp_val
+
+
+
+        print("////////////////////////////",responseDict)
+        return responseDict
+        # return response
 
 
 # @cross_origin()
