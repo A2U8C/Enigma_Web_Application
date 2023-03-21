@@ -9,7 +9,7 @@ from flask_cors import CORS, cross_origin
 
 
 from Resources.Projects import ProjectList
-from Resources.Covariates import CovariatePropertyList,CovariateCohortList, all_CovariatesList
+from Resources.Covariates import CovariatePropertyList,CovariateCohortList, all_CovariatesList,CovariateIntersectionCohorts
 
 
 app = Flask(__name__)
@@ -38,6 +38,10 @@ api.add_resource(ProjectList,'/projects') #Done
 api.add_resource(all_CovariatesList, '/allcovariates')#Do
 api.add_resource(CovariatePropertyList, '/covariate/<string:covariate_name>')#Do
 api.add_resource(CovariateCohortList, '/covariate/<string:covariate_name>/covarProp/<string:covariate_prop_name>')#Done
+
+
+
+api.add_resource(CovariateIntersectionCohorts, '/covariate_property_intersection')#Do
 
 if __name__ == "__main__":
     app.run(debug=True)

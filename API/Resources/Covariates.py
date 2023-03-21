@@ -87,6 +87,8 @@ class CovariateCohortList(Resource):
 
   			?ProjNameURI ?propCogName ?propProperty .
   			?propCogName rdfs:label "{covariate_prop_name}" .
+  			
+  			filter(?propProperty != false && ?propProperty != "FALSE") .
 
   			?cohortURI rdfs:label ?cohortName .
 
@@ -123,3 +125,18 @@ class CovariateCohortList(Resource):
         dict_cohort_part["Missing"] = list(missing_datasets)
 
         return dict_cohort_part
+
+
+
+class CovariateIntersectionCohorts(Resource):
+    def get(self):
+        abort(403, message="Forbidden Method")
+
+    def post(self):
+        body = request.get_json()
+        cohort_dict=eval(body["data_covCoh"])
+        print(cohort_dict,cohort_dict.keys())
+
+        return []
+
+

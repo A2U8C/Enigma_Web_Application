@@ -75,6 +75,7 @@ class CohortList(Resource):
         response = obj.request(qb.get_query())
 
         dict_cohort_part = {}
+        print(response)
         all_cohorts = [i["cohortName"]["value"] for i in response]
         present_cohorts = sorted(set(all_cohorts) - missing_datasets)
         dict_cohort_part["presentCohorts"] = present_cohorts
