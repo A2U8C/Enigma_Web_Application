@@ -135,8 +135,66 @@ class CovariateIntersectionCohorts(Resource):
     def post(self):
         body = request.get_json()
         cohort_dict=eval(body["data_covCoh"])
-        print(cohort_dict,cohort_dict.keys())
+        obj = Queryer(body['endpoint_id'])
 
-        return []
+        f_val=""
+        if cohort_dict=={}:
+            return []
+
+        for i in cohort_dict.keys():
+            val=""
+            # if i=="Has neuropsychiatric (E)":
+            cov_label=i.split(" ")[1]+"Name"
+            cov_uri="has"+i.split(" ")[1]+"URI"
+            cov_prop=i.split(" ")[1]+"Prop"
+
+            val +=f'''
+                
+                ?cohortURI ?{cov_label} ?{cov_uri} .
+                ?{cov_label} rdfs:label "{i}".
+                '''
+
+            mid_el=i.split(" ")[1]+"_URI"
+            for ind,j in enumerate(cohort_dict[i]):
+                val+=f'''
+                ?{cov_uri} ?{cov_prop}_{str(ind)} ?{mid_el} . 
+                ?{cov_prop}_{str(ind)} rdfs:label "{j}" .
+                '''
+            val+=f'''
+                filter(?{mid_el} = true) .
+                '''
+
+            f_val+=val
+
+
+        query = f'''
+                    ?project a ?projectClass.
+                    ?projectClass rdfs:label "{body['projType']}".
+        
+                    ?projectName rdfs:label "{body['name']}" . 
+                    ?project ?hasCohort ?cohortURI.
+                    
+                    ?cohortURI rdfs:label ?cohortName .'''+f_val
+
+        vars = ['?cohortName']
+
+        qb = QB.QueryBuilder()
+        qb.set_query(query=query, vars=vars)
+
+        print(qb.get_query())
+
+        response = obj.request(qb.get_query())
+
+        dict_cohort_part = {}
+        array_coh=[i["cohortName"]["value"] for i in response]
+        dict_cohort_part["all_present"] = array_coh
+
+
+
+
+        return array_coh
+
+
+        #return []
 
 
