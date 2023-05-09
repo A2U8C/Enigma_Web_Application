@@ -101,6 +101,7 @@ class CohortProjectList(Resource):
         qb = QB.QueryBuilder()
         qb.set_query(query=query, vars=vars)
 
+        print(qb.get_query())
         response = obj.request(qb.get_query())
 
         return response

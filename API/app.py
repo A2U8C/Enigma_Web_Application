@@ -44,4 +44,5 @@ api.add_resource(CovariateCohortList, '/covariate/<string:covariate_name>/covarP
 api.add_resource(CovariateIntersectionCohorts, '/covariate_property_intersection')#Do
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
