@@ -105,3 +105,58 @@ class CohortProjectList(Resource):
         response = obj.request(qb.get_query())
 
         return response
+
+
+
+# @cross_origin()
+class CohortCovariateVariables(Resource):
+    def get(self, cohort_name_full: str) -> str:
+        return cohort_name_full.replace('_', ' ')
+
+    def post(self, cohort_name_full: str):
+        body = request.get_json()
+        obj = Queryer(body['endpoint_id'])
+        cohort_name = cohort_name_full.replace('_', ' ')
+
+        query = f'''
+            ?project a ?projectClass.
+            ?projectClass rdfs:label "{body['projType']}".
+
+            ?projectName rdfs:label "{body['name']}" .
+
+  
+            ?project ?hasCohort ?cohortURI2.
+            ?hasCohort rdfs:label "HasCohort (E)".
+
+  			?cohortURI2 ?propURI2 ?cohortURI.
+  			?propURI2 rdfs:label "{body['covariate_Name']}" .
+  				
+  			?cohortURI ?propURI ?PropValURI.
+  			?propURI rdfs:label ?prop .
+  
+  			filter(?PropValURI != false && ?PropValURI != "FALSE") .
+
+
+  			?cohortURI2 rdfs:label ?cohort .
+  			filter(?cohort = "{cohort_name}")
+
+        '''
+
+        vars = ['?prop']
+
+        qb = QB.QueryBuilder()
+        qb.set_query(query=query, vars=vars)
+
+        response = obj.request(qb.get_query())
+
+        print(qb.get_query())
+        print(response)
+
+        all_el=[]
+
+        for i in response:
+            all_el.append(i['prop']['value'])
+
+
+
+        return response

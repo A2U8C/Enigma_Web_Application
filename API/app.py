@@ -3,7 +3,7 @@ from flask_restful import Api
 
 # Import Resources
 from Resources.Cohorts import CohortList, Cohort, CohortDetails
-from Resources.CohortProjects import CohortProject, CohortProjectList
+from Resources.CohortProjects import CohortProject, CohortProjectList,CohortCovariateVariables
 from flask_cors import CORS, cross_origin
 
 
@@ -42,6 +42,12 @@ api.add_resource(CovariateCohortList, '/covariate/<string:covariate_name>/covarP
 
 
 api.add_resource(CovariateIntersectionCohorts, '/covariate_property_intersection')#Do
+
+
+
+
+
+api.add_resource(CohortCovariateVariables, '/covariateCohortList/<string:cohort_name_full>')#Do
 
 if __name__ == "__main__":
     # app.run(debug=True)
