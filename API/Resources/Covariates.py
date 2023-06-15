@@ -133,13 +133,15 @@ class CovariateIntersectionCohorts(Resource):
         abort(403, message="Forbidden Method")
 
     def post(self):
+        print("Entered")
         body = request.get_json()
+        print(body)
         cohort_dict=eval(body["data_covCoh"])
         obj = Queryer(body['endpoint_id'])
 
         f_val=""
-        if cohort_dict=={}:
-            return []
+        if len(cohort_dict.keys())==0:
+            return {}
 
         for i in cohort_dict.keys():
             val=""
@@ -189,10 +191,16 @@ class CovariateIntersectionCohorts(Resource):
         array_coh=[i["cohortName"]["value"] for i in response]
         dict_cohort_part["all_present"] = array_coh
 
+        name_val=""
+        for k in cohort_dict.keys():
+            name_val+=k+": "
+            for ind,v in enumerate(cohort_dict[k]):
+                name_val+=(" " if ind==0 else ", ")+v
+            name_val+="!@#$!@#"
 
-
-
-        return array_coh
+        dict_cohort_part["name_val"]=name_val
+        print(name_val)
+        return dict_cohort_part
 
 
         #return []
