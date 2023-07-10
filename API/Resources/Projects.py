@@ -49,5 +49,8 @@ class ProjectList(Resource):
 
         dict_proj_name["all_cohorts"] = sorted(all_know_cohorts)
         dict_proj_name["Unknown"] = sorted(all_know_cohorts - all_list)
+
+        print(qb.get_query())
+        print(dict_proj_name)
         # dict_proj_name["allCohorts"]=list(all_list)
         return dict_proj_name
